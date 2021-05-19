@@ -6,11 +6,13 @@ dotenv = require('dotenv').config();
 
 const app = express();
 const authRoute = require('./routes/auth');
+const entrieRoute = require('./routes/entrie');
 
 app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/auth', authRoute);
+app.use('/entrie', entrieRoute);
 
 app.use((err, req, res, next) => {
     const { data, message, statusCode } = err;
@@ -20,7 +22,7 @@ app.use((err, req, res, next) => {
 
 mongoose.connect(process.env.DATABASE_URI)
 .then(() => {
-    let port = process.env.PORT || 8000;
+    const port = process.env.PORT || 8000;
     app.listen(port, () => {
             console.log(`Server is up on port ${port}`);
         })

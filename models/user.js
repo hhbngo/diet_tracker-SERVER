@@ -10,6 +10,29 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    entries: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Entrie'
+        }
+    ],
+    stats: {
+        weightHistory: [
+            {
+                weight: {type: Number, required: true},
+                date: {type: Schema.Types.Date, required: true}
+            }
+        ],
+        TDEE: {
+            type: Number,
+            default: 0
+        },
+        unit: {
+            type: String,
+            enum: ['Metric', 'Imperial'],
+            default: 'Metric'
+        }
     }
 }, {timestamps: true});
 
