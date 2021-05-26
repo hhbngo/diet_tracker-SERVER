@@ -8,3 +8,28 @@ exports.userRegisterValidator = [
         .trim()
         .isLength({min: 6})
 ];
+
+exports.mealValidator = [
+    body('foods.*.name')
+        .trim()
+        .isString(),
+    body('foods.*.weight')
+        .trim()
+        .isNumeric(),
+    body('foods.*.fat')
+        .trim()
+        .isNumeric(),
+    body('foods.*.carb')
+        .trim()
+        .isNumeric(),
+    body('foods.*.protein')
+        .trim()
+        .isNumeric(),
+    body('foods.*.calories')
+        .trim()
+        .isNumeric(),
+    body('time')
+        .trim()
+        .isString()
+];
+

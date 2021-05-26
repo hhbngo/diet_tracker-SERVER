@@ -15,7 +15,7 @@ const entrieSchema = new Schema({
                 }
             ],
             time: {
-                type: Schema.Types.Date,
+                type: String,
                 required: true
             }
         }

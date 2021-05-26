@@ -20,7 +20,7 @@ app.use((err, req, res, next) => {
     res.status(status).send({ message, data });
 })
 
-mongoose.connect(process.env.DATABASE_URI)
+mongoose.connect(process.env.DATABASE_URI, {useFindAndModify: false, useNewUrlParser: true})
 .then(() => {
     const port = process.env.PORT || 8000;
     app.listen(port, () => {
