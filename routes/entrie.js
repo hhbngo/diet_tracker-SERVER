@@ -5,7 +5,7 @@ const getEdamamData = require('../middlewares/edamam');
 const {mealValidator} = require('../validators');
 const { addEntrie, getEntries, getEntry, deleteEntrie, createMeal ,updateMeal, deleteMeal } = require('../controllers/entrie');
 
-router.get('/get-entries', isAuth, getEntries);
+router.get('/get-entries/:page', isAuth, getEntries);
 router.get('/get-entry/:entrieId', isAuth, getEntry);
 router.put('/create-entrie', isAuth, addEntrie);
 router.delete('/delete-entrie/:entrieId', isAuth, deleteEntrie);

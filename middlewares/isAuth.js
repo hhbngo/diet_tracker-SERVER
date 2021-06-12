@@ -11,6 +11,7 @@ module.exports = (req, res, next) => {
         if (!decodedPayload) throw createError(401, 'Not authorized');
 
         req.userId = decodedPayload.userId; 
+        req.email = decodedPayload.email;
         next();
 
     } catch (err) {

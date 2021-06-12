@@ -9,7 +9,7 @@ exports.createUser = async(req, res, next) => {
     try {
         if(!errors.isEmpty()) {
             const errorData = errors.array();
-            throw createError(422, 'Field Validation(s) failed. Request malformed.', errorData);
+            throw createError(422, 'Fields are not valid', errorData);
         }
 
         const { email, password } = req.body;
@@ -33,7 +33,7 @@ exports.signIn = async (req, res, next) => {
         const user = await User.findOne({email});
 
         if (!user) {
-            throw createError(401, 'That email is not registered');
+            throw createError(401, 'This email is not registered');
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -43,7 +43,7 @@ exports.signIn = async (req, res, next) => {
         }
         
         const token = jwt.sign({email: user.email, userId: user._id}, process.env.JWT_SECRET, {expiresIn: '3h'});
-        res.status(200).send({token, userId: user._id.toString()});
+        res.status(200).json({token, userId: user._id.toString(), email: user.email});
 
     } catch (err) {
         next(err);

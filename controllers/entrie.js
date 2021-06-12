@@ -2,12 +2,50 @@ const Entrie = require('../models/entrie');
 const User = require('../models/user');
 const { validationResult } = require('express-validator');
 const createError = require('../util/error');
+const mongoose = require('mongoose');
 
 exports.getEntries = async(req, res, next) => {
     try {
+        const page = parseInt(req.params.page);
+        const pageSkip = (page-1) * 4;
         const { userId } = req;
-        const entries = await User.findById(userId).select('entries -_id').populate('entries');
-        res.status(302).send(entries);
+        const u = await User.aggregate([
+            {
+                $match: {_id: mongoose.Types.ObjectId(userId)}
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalEntries: {
+                        $size: '$entries'
+                    },
+                    entries: {
+                        $slice: [
+                            {$reverseArray: '$entries'},
+                            pageSkip,
+                            4
+                        ]
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'entries',
+                    localField: 'entries',
+                    foreignField: '_id',
+                    as: 'pageEntries'
+                }
+            },
+            {
+                $project: {
+                    'pageEntries.meals': 0,
+                    'pageEntries.updatedAt': 0,
+                    'pageEntries.__v': 0,
+                    entries: 0
+                }
+            }
+        ]);
+        res.status(200).send(u[0]);
     } catch (err) {
         next(err)
     }
@@ -16,7 +54,6 @@ exports.getEntries = async(req, res, next) => {
 exports.getEntry = async(req, res, next) => {
     try {
         const entry = await Entrie.findById(req.params.entrieId).exec();
-        console.log(entry);
         if (!entry) throw createError(404, 'Entry not found');
         res.status(200).send(entry);
 
@@ -29,9 +66,9 @@ exports.addEntrie = async(req, res, next) => {
     const { userId } = req;
     try {
         const entry = await new Entrie().save();
-        await User.findByIdAndUpdate(userId, {
-            $push: { entries: entry._id}
-        });
+        const user = await User.findById(userId);
+        user.entries.push(entry._id);
+        await user.save();
         res.status(200).send('Entrie Created');
     } catch (err) {
         next(err)
