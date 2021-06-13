@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 exports.getEntries = async(req, res, next) => {
     try {
         const page = parseInt(req.params.page);
+        if (page <  1) throw createError(404, 'Invalid page number')
         const pageSkip = (page-1) * 4;
         const { userId } = req;
         const u = await User.aggregate([
