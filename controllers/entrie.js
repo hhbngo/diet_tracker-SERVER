@@ -124,13 +124,12 @@ exports.updateMeal = async(req, res, next) => {
     } catch (err) {
         next(err)
     }
-
 }
 
 exports.deleteMeal = async(req, res, next) => {
     try {
         const deleted = await Entrie.findOneAndUpdate({"meals._id": req.params.mealId}, {$pull: {meals : {_id: req.params.mealId}}}).exec();
-        if (!deleted) throw createError(400, 'Unable to update meal');
+        if (!deleted) throw createError(400, 'Unable to delete meal');
 
         res.status(200).send('Deleted meal');
     } catch (err) {

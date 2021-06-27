@@ -14,6 +14,7 @@ const entrieSchema = new Schema({
                     calories: Number
                 }
             ],
+            totalCalories: Number,
             time: {
                 type: String,
                 required: true

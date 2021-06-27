@@ -12,6 +12,6 @@ router.delete('/delete-entrie/:entrieId', isAuth, deleteEntrie);
 router.put('/create-meal/:entrieId', isAuth, mealValidator, createMeal);
 router.patch('/update-meal/:mealId', isAuth, mealValidator, updateMeal);
 router.delete('/delete-meal/:mealId', isAuth, deleteMeal);
-router.post('/get-edamam', getEdamamData, (req, res) => res.status(200).send(req.foodData));
+router.post('/check-food', getEdamamData, (req, res) => res.status(200).send(req.foodData));
 
 module.exports = router; 
