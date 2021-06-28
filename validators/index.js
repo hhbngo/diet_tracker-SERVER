@@ -13,6 +13,8 @@ exports.mealValidator = [
     body('foods.*.name')
         .trim()
         .isString(),
+    body('foods')
+        .notEmpty(),
     body('foods.*.weight')
         .trim()
         .isNumeric(),

@@ -110,7 +110,6 @@ exports.createMeal = async(req, res, next) => {
     } catch (err) {
         next(err)
     }
-
 }
 
 exports.updateMeal = async(req, res, next) => {
